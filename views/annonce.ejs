@@ -1,0 +1,25 @@
+<% include partials/head.ejs %>
+<% include partials/header.ejs %>
+<nav class="primaryNavigation" role="navigation">
+        <ul id="mySidenav">
+        <% menus.forEach(menu => { %>
+                <li><a href="/<%= menu.url %>"><%= menu.name %></a></li>
+                <% }); %>
+        </ul>
+</nav>
+<main tabindex="0" class="main" role="main">
+        <h1><%= title %></h1>
+        <p><%= content %></p>
+        <div class="productContainer">
+        <% annoncer.forEach(annonce => { %>
+                <article class="produktItem">
+                        <h2><%= annonce.name %></h2>  <!--Her skriver vi annoncens navn ud.-->
+                        <img src="../media/<%= annonce.image %>" alt="">   <!--Her skriver vi annoncens billede ud.-->
+                        <p>Pris <%= annonce.price %> DKK</p>
+                        <p><%= annonce.content %></p>
+                </article>
+                <% }); %>
+        </div>
+</main>
+<% include partials/footer.ejs %>
+<% include partials/after-footer.ejs %>

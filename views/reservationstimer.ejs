@@ -1,0 +1,65 @@
+<% include partials/head.ejs %>
+<% include partials/header.ejs %>
+
+<nav class="primaryNavigation" role="navigation">
+        <ul id="mySidenav">
+        <% menus.forEach(menu => { %>  <!--løkken lupper alle menupunkter igennem, og skriver hver enkelt ud, istedet for alle sammen.-->
+                <li><a href="/<%= menu.url %>"><%= menu.name %></a></li>
+                <% }); %>
+        </ul>
+</nav>
+
+<main tabindex="0" role="main" class="main reservationsmain" id="maincontent">
+    <div class="formReservationer">
+<form action="/bookingstid" method="post">
+    <input type="date" name="date">
+    <button type="submit">vælg en dato</button>
+</form>
+<p><%= (typeof erroMessage != "undefined") ? erroMessage : '' %></p>
+</div>
+
+<div class="myResarvations">
+<H2>Dine Reservationer</H2>
+<table>
+    <thead>
+        <tr>
+            <th>Dato</th>
+            <th>Start</th>
+            <th>Slut</th>
+            <th>Slet</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% reservationer.forEach(reservation => { %>
+        <tr>
+            <td><%= moment(reservation.date).format('LL') %></td>
+            <td><%= reservation.starts %></td>
+            <td><%= reservation.ends %></td>
+            <td><i data-id="<%= reservation.id %>" data-category="reservation" class="fas fa-trash-alt"></i> </td>
+        </tr>
+    <% }) %>
+    </tbody>
+</table>
+</div>
+</main>
+
+<script>
+        const deleteButtons = document.querySelectorAll('.fa-trash-alt');  // Den vælger alle skraldespande.
+    deleteButtons.forEach(btn => {  //Den lupper igennem alle skraldespandene.
+        btn.addEventListener('click', event => {
+            const id = event.target.dataset.id;
+            const category = event.target.dataset.category;
+            fetch(`/admin/${category}/${id}`, {
+                'method': 'DELETE'
+            })
+            .then(response => {
+                if (response.status === 200) {
+                    window.location.reload();
+                }
+            });
+        })
+    })
+    </script>
+
+<% include partials/footer.ejs %>
+<% include partials/after-footer.ejs %>

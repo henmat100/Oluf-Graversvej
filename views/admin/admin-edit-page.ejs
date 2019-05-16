@@ -1,0 +1,58 @@
+<% include ../partials/head.ejs %>
+<% include ./partials/admin-header.ejs %>
+<% include ./partials/admin-primaryNavigation.ejs %>
+
+<main role="main" class="adminPage">
+	<section>
+        <h1><%= title %></h1>
+    <form action="" class="productItem adminForm">
+        <label><img src="../../media/<%= page.image %>" alt=""></label>
+        <input type="file">
+        <input type="hidden" name="id" value="<%= page.id %>">
+        <label>Navn</label>
+        <input type="text" value="<%= page.name %>" name="name">
+        <label>Beskrivelse</label>
+        <textarea type="text" name="content"><%= page.content %></textarea>
+        <div name="categories" class="categoryUpdate" data-id="<%= page.fk_category %>">
+
+         </div>
+        <button type="submit">updater</button>
+        <a href="/admin/side">Tilbage til sider</a>
+    </form>
+</main>
+<% include ./partials/admin-footer.ejs %>
+<script src="/scripts/dynamicSelect.js"></script>
+<!--Script til at opdatere artiklerne-->
+<script>
+    const menuArray = document.querySelectorAll('.productItem');
+
+    menuArray.forEach(file => {
+        file.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const data = {
+                'id' : this.id.value,
+                'name' : this.name.value,
+                'content' : this.content.value,
+                'category' : this.categoryUpdate.value
+
+            };
+            fetch('/admin/side', {
+                method: 'PATCH',
+                headers: {
+                    'content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (response.status === 204) {
+                    window.location.reload(true);
+                } else {
+                    console.log('noget er galt');
+                }
+            })
+        })
+    })
+
+</script>
+<% include ../partials/after-footer.ejs %>
+   

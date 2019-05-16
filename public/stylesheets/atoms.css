@@ -1,0 +1,386 @@
+/*Der er ingen margin og padding rundt om elementer*/
+* {
+    margin: 0;
+    padding: 0;
+}
+
+/* #wrapper {
+    min-height: calc(100vh - 285px);
+} */
+#adminWrapper {
+    display: grid;
+    grid-gap: 0;
+    grid-template-areas: 
+        "head head head"
+        "navi main main"
+        "navi main main"
+        "navi main main"
+        "foot foot foot";
+    grid-template-columns: 10% 80% 10%;
+    grid-template-rows: auto 50px, auto 100px;
+}
+
+#frontEnd {
+    display: grid;
+    grid-gap: 0;
+    grid-template-areas: 
+        "head head head"
+        "navi navi navi"
+        "main main main"
+        "main main main"
+        "foot foot foot";
+    grid-template-columns: 10% 80% 10%;
+    grid-template-rows: auto 50px, auto 100px;
+}
+/*jumpcontent funktionerne gør at man kan steppe rundt på siden via tab knappen */
+#jumpToContent {
+    left:-999px;
+    position:absolute;
+    top:auto;
+    width:1px;
+    height:1px;
+    overflow:hidden;
+    z-index:-999;
+}
+#jumpToContent:focus, #jumpToContent:active {
+    color: #000000;
+    background-color:#fff;
+    left: auto;
+    top: auto;
+    width: 30%;
+    height: auto;
+    overflow:auto;
+    margin: 10px 35%;
+    padding:5px;
+    border-radius: 15px;
+    text-align:center;
+    font-size:1.2em;
+    z-index:999;
+}
+
+/*----------header----------*/
+.adminSiteHeader {
+    grid-area: head;
+    height: 130px;
+    margin: 0;
+    padding: 0;
+}
+
+.siteHeader {
+    grid-area: head;
+    height: 100px;
+    margin: 0;
+    padding: 0;
+}
+.admindiv, .headerContent {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgb(61, 112, 223);
+    padding: 2em;
+    box-sizing: border-box;
+}
+
+.admindiv {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgb(97, 95, 95);
+    padding: 2em;
+    box-sizing: border-box;
+}
+
+/*-------header billede-------*/
+.adminHeaderLogo img {
+    width: 8em;
+    height: auto;
+}
+
+.HeaderLogo img {
+    width: 11em;
+    height: auto;
+}
+
+/*-----header log ud knap-----*/
+.adminHeaderLogout a {
+    color: #fff;
+}
+
+.adminHeaderText a, .topText {
+    color:#fff;
+    text-decoration: none;
+}
+
+/*----------nav----------*/
+nav {
+    text-align: center ;
+    background-color: #9999;
+    height: 2em;
+}
+
+nav ul {
+    display: flex;
+    justify-content: space-around;
+    list-style-type: none;
+    height: 2em;
+    align-items: center;
+}
+
+#myAdminSidenav {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    list-style-type: none;
+    height: 25em;
+  
+    text-align: left;
+}
+
+nav ul a {
+    text-decoration: none;
+    color: #fff;
+}
+.adminPrimaryNavigation, .primaryNavigation {
+    grid-area: navi;
+    margin: 0;
+    height: 100%;
+}
+
+/*----------footer----------*/
+.siteFooter {
+    color: white;
+    text-align: center;
+    background-color: rgb(61, 112, 223);
+    font-size: 1em;
+    width: 100%;  
+    height: 2.5em;   
+}
+
+.adminSiteFooter {
+    color: white;
+    text-align: center;
+    background-color: rgb(97, 95, 95);
+    font-size: 1em;
+    width: 100%;  
+    height: 2.5em;   
+}
+.adminSiteFooter, .siteFooter {
+    grid-area: foot;
+}
+.footerContent {
+    display: flex;
+    text-align: center;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    height: 2.5em;  
+}
+
+/*-------article content-------*/
+main {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    text-align: center;
+    margin-top: 3em;
+}
+
+.produktItem {
+    width: 30%;
+    margin: 1em;
+}
+
+.productContainer {
+    width: 80vw;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/*----------admin----------*/
+.adminPage, .main {
+    grid-area: main;
+}
+
+.productList {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+    width: 90vw;
+}
+
+.adminForm {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5px;
+    padding: 15px 0; 
+    width: 90vw;
+}
+
+.adminHeaderLogout a {
+    color:white;
+    font-size: 1em;
+    background-color: #9999;
+    padding: 0.5em 1em;
+    border-radius: 15px;
+}
+
+/*admin produkt side*/
+#adminOpretProdukt,
+#adminOpretSide, 
+.productItem  {
+    display: flex;
+    flex-direction: column;
+}
+
+#FejlbeskedBillede {
+    color: red;
+    }
+
+#FejlbeskedNavn {
+color: red;
+}
+
+#FejlbeskedKategori {
+    color: red;
+}
+
+#FejlbeskedPris {
+    color: red;
+}
+
+#FejlbeskedBeskrivelse {
+    color: red;
+}
+
+/*tabel1*/
+.productListItems tr th{
+    width: 10em;
+}
+/*-----billeder på admin-artikel siden */
+img {
+    width: 4em;
+    height: auto;
+    padding: 5px;
+}
+
+section {
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-bottom: 15px;
+}
+
+/*-----forsidetext på admin-forsiden*/
+.forsideText {
+    padding: 0 25px 0 25px;
+}
+
+.contact {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    width: 95vw;
+    margin-top: 2px;
+}
+
+/*-----login siden-----*/
+.inputGroup1 {
+    margin-right: 78px;
+    padding: 3px;
+}
+
+.inputGroup2 {
+    margin-right: 90px;
+}
+
+.inputGroup3 {
+    margin-right: 60px;
+}
+
+.button1 {
+    margin: 3px;
+}
+
+.errorMessage {
+    color: red;
+}
+
+/*-----Opret Bruger-----*/
+
+/*-----contact siden-----*/
+#contactForm input, #contactForm textarea {
+    margin: 3px;
+}
+
+.tableContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-self: center;
+    text-align: center;
+    height: 430px;
+    overflow: scroll;
+    overflow-x: hidden;
+    border: #000000 solid 1px;
+    width: 400px;
+}
+
+.bookingtable {
+    padding: 0px;
+}
+
+.gren{
+    background: #0f0;
+}
+.red{
+    background: #f00;
+}
+.choosetime {
+    background: #000000;
+    color: white;
+}
+
+.button {
+   background-color: #0f0;
+   width: 5em;
+   padding: 1em 2em;
+    align-self: center;
+    margin: 0.5em;
+    border-radius: 15px;
+    text-decoration: none;
+}
+
+.myResarvations {
+    height: 100%;
+    text-align: left;
+}
+
+.reservationsmain {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 80%;
+}
+
+.reservationstidmain {
+    display: flex;
+    flex-wrap: wrap;
+    width: 80%;
+}
+
+ul {
+    list-style: none;
+}
+
+
+
+
+
+
+
+
+

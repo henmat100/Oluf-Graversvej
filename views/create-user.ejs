@@ -1,0 +1,23 @@
+<% include partials/head %>
+<% include partials/header %>
+
+<main tabindex="0" role="main" class="main" id="maincontent">
+    <h1><%= title %></h1>
+        <p class="errorMessage"><%= (typeof messages.error != 'undefined') ? messages.error : '' %></p>
+    <form class="createUserForm" action="/create-user" method="post">
+        <div class="inputGroup1">
+        <label for="username" id="LabelUsername">Brugernavn:</label><input type="text" name="username" id="InputUsername" placeholder="Brugernavn" value="<%= (typeof username != 'undefined') ? username : '' %>">
+    </div>
+
+    <p class="errorMessage"><%= (typeof errorMessagePass != 'undefined') ? errorMessagePass : '' %></p>
+    <div class="inputGroup3">
+        <label for="password" id="LabelPassword">Kodeord:</label><input type="password" name="password" id="InputPassword" placeholder="Kodeord" value="<%= (typeof password != 'undefined') ? password : '' %>">
+        <input type="hidden" name="guest" value="6">
+    </div>
+    <div class="button1">
+        <button type="submit" id="InputSend">Send</button>
+    </div>   
+    </form>
+</main>   
+<% include partials/footer %>
+<% include partials/after-footer %>

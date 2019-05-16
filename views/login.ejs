@@ -1,0 +1,31 @@
+<% include partials/head.ejs %>
+<% include partials/header.ejs %>
+<nav class="primaryNavigation" role="navigation">
+        <ul id="mySidenav">
+        <% menus.forEach(menu => { %>
+                <li><a href="/<%= menu.url %>"><%= menu.name %></a></li>
+                <% }); %>
+        </ul>
+</nav>
+<main tabindex="0" role="main" class="main" id="maincontent">
+<h1><%= title %></h1>
+<form action="/auth/login" method="POST">
+	<% if (typeof status != 'undefined') { %>
+		<span class="errorMessage"><%= status %></span>
+	<% } %>
+	<div class="inputGroup1">
+		<label>Brugernavn<input type="text" name="username"></label>
+	</div>		
+			
+	<div class="inputGroup2"><label>Adgangskode<input type="password" name="password"></label>
+	</div>	
+			
+	<div class="button1">	
+	   <button type="submit">Login</button>
+        </div>
+</form>
+<a href="/create-user">Opret en Bruger</a>
+<br>
+</main>
+<% include partials/footer.ejs %>
+<% include partials/after-footer.ejs %>

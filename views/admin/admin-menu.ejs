@@ -1,0 +1,92 @@
+<% include ../partials/head.ejs %>
+<% include ./partials/admin-header.ejs %>
+<% include ./partials/admin-primaryNavigation.ejs %>
+
+<main role="main" class="adminPage">
+	<section>
+        <h1><%= title %></h1>
+        <% menus.forEach(menu => { %>  <!--man lupper alle artiklerne igennem, så den skriver alle ud på siden-->
+            <!--Form til redigering af menu-->
+        <form action="" class="menuItem adminForm">
+            <input type="hidden" name="id" value="<%= menu.id %>">
+            <label>Navn</label>
+            <input type="text" value="<%= menu.name %>" name="name">
+            <label>Position</label>
+            <input type="text" value="<%= menu.position %>" name="position">
+            <label>Url</label>
+            <input type="text" value="<%= menu.url %>" name="url" disabled>
+            <button type="submit">updater</button>
+            <i data-id="<%= menu.id %>" data-category="menu" class="fas fa-trash-alt"></i>
+        </form>
+        <% }); %>
+    </section>
+    <section>
+            <h1>Admin - Opret nyt menupunkt til forsiden!</h1>
+            <p class="errorMessage"><%= (typeof errorMessage != "undefined") ? errorMessage : "" %></            
+                >
+            <!--Form til opretning af nyt menupunkt-->
+            <form action="" method="POST" class="adminForm">
+                <input type="hidden" name="id">
+                <label>Navn</label>
+                <input type="text" name="name" value="<%= (typeof name != 'undefined')? name: '' %>">
+                <label>Position</label>
+                <input type="text" name="position" value="<%= (typeof position != 'undefined')? position: '' %>">
+                <label>Url</label>
+                <input type="text" name="url">
+                <button type="submit">opret</button>
+            </form>  
+        </section> 
+</main>
+<% include ./partials/admin-footer.ejs %>
+<!--Script til at opdatere menupunkterne-->
+<script>
+    const menuArray = document.querySelectorAll('.menuItem');
+
+    menuArray.forEach(file => {
+        file.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const data = {
+                'id' : this.id.value,
+                'name' : this.name.value,
+                'position' : this.position.value,
+                'url' : this.url.value
+
+            };
+            fetch('/admin/menu', {
+                method: 'PATCH',
+                headers: {
+                    'content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (response.status === 204) {
+                    window.location.reload(true);
+                } else {
+                    console.log('noget er galt');
+                }
+            })
+        })
+    })
+
+</script>
+
+<!--Script til at slette hele menupunkterne med metoden DELETE-->
+<script>
+    const deleteButtons = document.querySelectorAll('.fa-trash-alt');  // Den vælger alle skraldespande.
+deleteButtons.forEach(btn => {  //Den lupper igennem alle skraldespandene.
+    btn.addEventListener('click', event => {
+        const id = event.target.dataset.id;
+        const category = event.target.dataset.category;
+        fetch(`/admin/${category}/${id}`, {
+            'method': 'DELETE'
+        })
+        .then(response => {
+            if (response.status === 200) {
+                window.location.reload();
+            }
+        });
+    })
+})
+</script>
+<% include ../partials/after-footer.ejs %>

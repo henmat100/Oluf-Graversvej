@@ -1,0 +1,130 @@
+<% include partials/head.ejs %>
+<% include partials/header.ejs %>
+
+<nav class="primaryNavigation" role="navigation">
+        <ul id="mySidenav">
+        <% menus.forEach(menu => { %>  <!--løkken lupper alle menupunkter igennem, og skriver hver enkelt ud, istedet for alle sammen.-->
+                <li><a href="/<%= menu.url %>"><%= menu.name %></a></li>
+                <% }); %>
+        </ul>
+</nav>
+
+<main tabindex="0" role="main" class="main reservationstidmain" id="maincontent">
+        <h1><%= title %></h1>   <!--Her skriver vi sidens overskrift ud.-->
+        <p><%= content %></p>   <!--Her skriver vi sidens tekst ud.-->
+        <br>
+        <p class="erroMessage"></p>
+    <div class="tableContainer">
+            <table class="bookingtable">
+                    <tbody>   
+                            <% booking.forEach(bookin => { %>
+                                <% if(bookin.reservationstime) { %>
+                                    <tr>
+                                    
+                                        <td >
+                    
+                                        </td>
+                                        <td  data-id="<%=bookin.id%>">
+                                            <%= bookin.start %>
+                                        </td>
+                    
+                                        <td class="red">optaget</td>
+                                        </tr>
+                                <% } else{   %>
+                                    <tr>
+                                        <td >
+                    
+                                        </td>
+                                        <td class="timeslot gren" data-id="<%= bookin.id%>">
+                                            <%= bookin.start %>
+                                        </td>
+                    
+                                        <td></td>
+                                        </tr>
+                               <% } %>
+                                
+                           
+                        <% }); %>
+                    </tbody>
+                </table>
+</div>
+<a href="" class="button">Book en tid</a>
+<div class="myResarvations">
+        <H2>Dine Reservationer</H2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Dato</th>
+                    <th>Start</th>
+                    <th>Slut</th>
+                    <th>Slet</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% reservationer.forEach(reservation => { %>
+                <tr>
+                    <td><%= moment(reservation.date).format('LL') %></td>
+                    <td><%= reservation.starts %></td>
+                    <td><%= reservation.ends %></td>
+                    <td><i data-id="<%= reservation.id %>" data-category="reservation" class="fas fa-trash-alt"></i> </td>
+                </tr>
+            <% }) %>
+            </tbody>
+        </table>
+        </div>
+</main>
+
+<script defer>
+        const btns = document.querySelectorAll('.timeslot');
+        btns.forEach(btns => {
+            btns.addEventListener('click', () => {
+                btns.classList.toggle('choosetime');
+            })
+        })
+    
+        const button = document.querySelector('.button');
+        button.addEventListener('click', function (event) {
+            event.preventDefault();
+            const slot = document.querySelector('.choosetime');
+            const id = slot.dataset.id;
+            const data = window.location.href.split('/').pop();
+            fetch('/booking/', {
+                method: 'post',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify( {
+                    'slotid': id,
+                    'date': data
+                })
+            })
+            .then(response => {
+                if (response.status === 200) {
+                    window.location.reload();  
+                } else{
+                document.querySelector('.erroMessage').innerHTML = "noget gik galt";
+            }
+            })  
+        })
+    </script>
+
+<script>
+        const deleteButtons = document.querySelectorAll('.fa-trash-alt');  // Den vælger alle skraldespande.
+    deleteButtons.forEach(btn => {  //Den lupper igennem alle skraldespandene.
+        btn.addEventListener('click', event => {
+            const id = event.target.dataset.id;
+            const category = event.target.dataset.category;
+            fetch(`/admin/${category}/${id}`, {
+                'method': 'DELETE'
+            })
+            .then(response => {
+                if (response.status === 200) {
+                    window.location.reload();
+                }
+            });
+        })
+    })
+    </script>
+
+<% include partials/footer.ejs %>
+<% include partials/after-footer.ejs %>

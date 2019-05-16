@@ -1,0 +1,149 @@
+<% include ../partials/head.ejs %>
+<% include ./partials/admin-header.ejs %>
+<% include ./partials/admin-primaryNavigation.ejs %>
+
+<main role="main" class="adminPage">
+	<section>
+        <h1><%= title %></h1>
+        <span class="errorMessage"></span>
+    <form action="" enctype="multipart/form-data" class="productItem adminForm" id="updateProductForm">
+            <input type="hidden" name="id" value="<%= annonce.id %>">
+        <label><img src="../../media/<%= annonce.image %>" alt="" class="billedePreview"></label>
+        <p id="FejlbeskedBillede"></p>
+        <input type="file" name="image" class="annonceBillede" data-imageid="<%= annonce.id %>">
+        <label>Titel</label>
+        <p id="FejlbeskedNavn"></p>
+        <input type="text" value="<%= annonce.name %>" name="name">
+        <label>Pris</label>
+        <p id="FejlbeskedPris"></p>
+        <input type="text" value="<%= annonce.price %>" name="price">
+        <label>Beskrivelse</label>
+        <p id="FejlbeskedBeskrivelse"></p>
+        <input type="text" name="quantity" value="<%= annonce.quantity %>">
+       
+        <button type="submit">updater</button>
+        <a href="/admin/annoncer">Tilbage til annoncer</a>
+    </form>
+</main>
+<% include ./partials/admin-footer.ejs %>
+<script src="/scripts/dynamicSelect.js"></script>
+
+<script>
+        const form = document.querySelector('#updateProductForm')
+        form.addEventListener('submit', (event) => {
+            // Forhindrer formularen i at submitte (det gør vi selv længere nede)
+            event.preventDefault ()
+    
+            console.log ("---------------");
+    
+            // ========================================
+            // Validering
+            
+            let formOK = true;
+    
+            if (form.image.value == ''){
+                formOK = false;
+                let Fejlbesked0 = 'Upload et billede her!';
+                let field0 = document.querySelector('#FejlbeskedBillede');
+                field0.textContent = Fejlbesked0
+            }
+    
+            else if (form.name.value == ''){
+                formOK = false;
+                let Fejlbesked1 = 'Udfyld en titel her!';
+                let field1 = document.querySelector('#FejlbeskedNavn');
+                field1.textContent = Fejlbesked1
+            }
+    
+            else if (form.categoryUpdate.value == ''){
+                formOK = false;
+                let Fejlbesked3 = 'Vælg en kategori her!';
+                let field3 = document.querySelector('#FejlbeskedKategori');
+                field3.textContent = Fejlbesked3
+            }
+    
+                else if (form.content.value == ''){
+                formOK = false;
+                let Fejlbesked2 = 'skriv venligst en besked her!';
+                let field2 = document.querySelector('#FejlbeskedPris');
+                field2.textContent = Fejlbesked2
+            }
+    
+              else if (form.content.value == ''){
+                formOK = false;
+                let Fejlbesked4 = 'skriv venligst en besked her!';
+                let field4 = document.querySelector('#FejlbeskedBeskrivelse');
+                field4.textContent = Fejlbesked4
+            }
+    
+            // ========================================
+            // Submit her hvis formular input er i orden
+            
+            if (formOK == true){
+    
+                form.submit()
+            }
+        })
+    </script>
+
+<!--Script til at opdatere artiklerne-->
+<script>
+    const menuArray = document.querySelector('#updateProductForm');
+
+        menuArray.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const data = {
+                'id' : this.id.value,
+                'name' : this.name.value,
+                'image' : this.image.value,
+                'quantity' : this.quantity.value,
+                'price' : this.price.value
+
+            };
+            fetch('/admin/annoncer', {
+                method: 'PATCH',
+                headers: {
+                    'content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (response.status === 204) {
+                    window.location.reload(true);
+                } else {
+                    console.log('noget er galt');
+                }
+            })
+        })
+
+</script>
+
+<!--Script til at opdatere billeder i redigere-produkt-->
+<script>
+const file = document.querySelector('.annonceBillede');
+	file.addEventListener('change', function (event) {
+        const pages = event.target.dataset.imageid
+		const formData = new FormData();
+		formData.append('photo', this.files[0]);
+		fetch( `/admin/ads/image/${pages}` , {
+			method: 'PATCH',
+			body: formData
+		})
+			.then(response => response.json())
+			.then(data => {
+                console.log(data)
+				if (data.image) {
+					const img = document.querySelector('.billedePreview');
+					img.src =  `/media/${data.image}`;
+				} else {
+				
+						document.querySelector('.errorMessage').innerHTML +=  data.message; 
+					
+
+				}
+			});
+	});
+</script>
+
+<% include ../partials/after-footer.ejs %>
+   

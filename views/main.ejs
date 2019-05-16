@@ -1,0 +1,44 @@
+<% include partials/head.ejs %>
+<% include partials/header.ejs %>
+
+<nav class="primaryNavigation" role="navigation">
+        <ul id="mySidenav">
+        <% menus.forEach(menu => { %>  <!--løkken lupper alle menupunkter igennem, og skriver hver enkelt ud, istedet for alle sammen.-->
+                <li><a href="/<%= menu.url %>"><%= menu.name %></a></li>
+                <% }); %>
+        </ul>
+</nav>
+<main tabindex="0" role="main" class="main" id="maincontent">
+    <h1><%= title %></h1>   <!--Her skriver vi sidens overskrift ud.-->
+    <p><%= content %></p>   <!--Her skriver vi sidens tekst ud.-->
+    <br>
+    <div class="HeaderLogo"><a href="/"><img src="../../media/kontorplads.jpg" alt=""></a></div>
+    <br>
+    <hr>
+    <h2>Lejere har adgang til</h2>
+    <ul>
+            <li>egen kontorplads i et åbent miljø</li>
+            <li>mødelokale med videokonferencefaciliteter (bookes efter aftale)</li>
+            <li>printer og kopimaskine</li>
+            <li>fiber internet forbindelse</li>
+            <li>frokoststue med lille køkken og køleskab</li>
+            <li>badeværelse og omklædningsrum</li>
+    </ul>
+    <br>
+    <p>I kælderen er der desuden mulighed for at parkere cykler.</p>
+    <p>Ring til os og hør nærmere om mulighederne og lejepriser..</p>
+    <hr>
+    <br>
+    <h2>Her vises de 3 billigste kontorlokaler</h2>
+    <div class="productContainer">
+    <% products.forEach(product => { %>
+        <article class="produktItem">
+                <h3><%= product.name %></h2>  <!--Her skriver vi produktets navn ud.-->
+                <img src="../media/<%= product.image %>" alt="">   <!--Her skriver vi produktets billede ud.-->
+                <p>Pris <%= product.price %> DKK</p>
+        </article>
+        <% }); %>
+      </div>
+</main>
+<% include partials/footer.ejs %>
+<% include partials/after-footer.ejs %>

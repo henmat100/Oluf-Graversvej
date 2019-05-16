@@ -1,0 +1,130 @@
+<% include ../partials/head.ejs %>
+<% include ./partials/admin-header.ejs %>
+<% include ./partials/admin-primaryNavigation.ejs %>
+
+<main role="main" class="adminPage">
+	<section>
+        <h1><%= title %></h1>
+    <div class="productList">
+        <table class="productListItems">
+            <thead>
+                <tr>
+                    <th>Rediger</th>
+                    <th>Billde</th>
+                    <th>Overskrift</th>
+                    <th>Kategori</th>
+                    <th>Slet</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% pages.forEach(page => { %>
+                    <tr>
+                        <td><a href="/admin/rediger-side/<%= page.id %>"><i class="fas fa-edit"></i></a></td>
+                        <td><img src="/media/<%= page.image %>" alt=""> </td>
+                        <td><%= page.name %></td>
+                        <td><%= page.category %></td>
+                        <td><i data-id="<%= page.id %>" data-category="side" class="fas fa-trash-alt"></i></td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+    </section>
+    <section>
+            <h1>Admin - Opret en ny side!</h1>
+            <!--Form til opretning af nye artikler-->
+            <form action="" method="POST" enctype="multipart/form-data" class="adminForm" id="adminOpretSide">   <!--Denne kode efter POST er så den kan oploade billeder-->
+                <label>Billede</label>
+                <p id="FejlbeskedBillede"></p>
+                <input type="file" name="image">
+                <label>Navn</label>
+                <p id="FejlbeskedNavn"></p>
+                <input type="text" name="name">
+                <label>Kategori</label>
+                <p id="FejlbeskedKategori"></p>
+                <div name="categories" class="categoryUpdate">
+
+                </div>
+                <label>Beskrivelse</label>
+                <p id="FejlbeskedBeskrivelse"></p>
+                <textarea type="text" name="content"></textarea>
+               
+                <button type="submit">opret</button>
+            </form>
+        </section>
+</main>
+<% include ./partials/admin-footer.ejs %>
+<script src="/scripts/dynamicSelect.js"></script>
+<!--Script til at opdatere artiklerne-->
+
+
+<!--Script til at slette hele artiklen med metoden DELETE-->
+<script>
+    const deleteButtons = document.querySelectorAll('.fa-trash-alt');  // Den vælger alle skraldespande.
+deleteButtons.forEach(btn => {  //Den lupper igennem alle skraldespandene.
+    btn.addEventListener('click', event => {
+        const id = event.target.dataset.id;
+        const category = event.target.dataset.category;
+        fetch(`/admin/${category}/${id}`, {
+            'method': 'DELETE'
+        })
+        .then(response => {
+            if (response.status === 200) {
+                window.location.reload();
+            }
+        });
+    })
+})
+</script>
+
+<script>
+        const form = document.querySelector('#adminOpretSide')
+        form.addEventListener('submit', (event) => {
+            // Forhindrer formularen i at submitte (det gør vi selv længere nede)
+            event.preventDefault ()
+    
+            console.log ("---------------");
+    
+            // ========================================
+            // Validering
+            
+            let formOK = true;
+    
+            if (form.image.value == ''){
+                formOK = false;
+                let Fejlbesked0 = 'Upload et billede her!';
+                let field0 = document.querySelector('#FejlbeskedBillede');
+                field0.textContent = Fejlbesked0
+            }
+    
+            else if (form.name.value == ''){
+                formOK = false;
+                let Fejlbesked1 = 'Udfyld en titel her!';
+                let field1 = document.querySelector('#FejlbeskedNavn');
+                field1.textContent = Fejlbesked1
+            }
+    
+            else if (form.categoryUpdate.value == ''){
+                formOK = false;
+                let Fejlbesked3 = 'Vælg en kategori her!';
+                let field3 = document.querySelector('#FejlbeskedKategori');
+                field3.textContent = Fejlbesked3
+            }
+    
+              else if (form.content.value == ''){
+                formOK = false;
+                let Fejlbesked2 = 'skriv venligst en besked her!';
+                let field2 = document.querySelector('#FejlbeskedBeskrivelse');
+                field2.textContent = Fejlbesked2
+            }
+    
+            // ========================================
+            // Submit her hvis formular input er i orden
+            
+            if (formOK == true){
+    
+                form.submit()
+            }
+        })
+    </script>
+<% include ../partials/after-footer.ejs %>
